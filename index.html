@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Le fil info : France, Isère, pompiers et secours.">
+  <title>Le Fil Info</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="screen" aria-label="Écran d’actualités">
+    <header>
+      <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span><h1 id="brand">LE FIL INFO</h1></div>
+      <div class="header-separator"></div><div id="subtitle">FRANCE · ISÈRE · SECOURS</div>
+      <div class="clock"><div id="date"></div><time id="time">--:--</time></div>
+    </header>
+    <div class="edition"><span><b class="dot"></b> L’ESSENTIEL DE L’ACTUALITÉ</span><span id="status" role="status">CHARGEMENT DES INFORMATIONS</span></div>
+    <div class="layout">
+      <section class="lead" aria-label="Actualité principale">
+        <div class="hero" id="hero">
+          <div class="photo-fallback"><span class="orb orb-one"></span><span class="orb orb-two"></span><span class="fallback-word">L’ESSENTIEL<span>FRANCE / ISÈRE / SECOURS</span></span></div>
+          <img id="hero-image" alt="" hidden>
+          <div class="hero-shade"></div>
+          <div class="hero-top"><span class="pill" id="category">LE FIL INFO</span><span id="image-note">ACTUALITÉS</span></div>
+          <div class="hero-copy"><div class="eyebrow" id="source">VOTRE RENDEZ-VOUS INFO</div><h2 id="headline">Vos actualités, au même endroit.</h2><p id="summary">Récupération des derniers titres en cours…</p><a id="article-link" target="_blank" rel="noopener noreferrer" hidden>Lire l’article ↗</a></div>
+        </div>
+        <div class="rotation"><div class="progress"><span id="progress"></span></div><span id="counter">— / —</span></div>
+      </section>
+      <aside><div class="aside-heading"><h2>À SUIVRE</h2><span>LES PROCHAINS TITRES</span></div><div id="up-next"></div><div class="sources-label">4 SOURCES · UN SEUL FIL</div></aside>
+    </div>
+    <footer><div class="ticker-label">LES TITRES <span>↗</span></div><div class="ticker-window"><div id="ticker">Les dernières informations apparaîtront ici.</div></div></footer>
+    <div class="bottom"><span>FRANCEINFO <i>•</i> LE MONDE <i>•</i> LE DAUPHINÉ LIBÉRÉ <i>•</i> SECOURS MAG</span><span id="freshness">MISE À JOUR AUTOMATIQUE</span></div>
+    <div id="demo-label" hidden>APERÇU · CONTENUS DE DÉMONSTRATION</div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

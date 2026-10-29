@@ -1,0 +1,13 @@
+{
+  "title": "LE FIL INFO",
+  "subtitle": "FRANCE · ISÈRE · SECOURS",
+  "slideSeconds": 20,
+  "refreshSeconds": 900,
+  "maxAgeHours": 72,
+  "feeds": [
+    {"id": "lemonde", "name": "Le Monde", "category": "À LA UNE", "url": "https://www.lemonde.fr/rss/une.xml"},
+    {"id": "franceinfo", "name": "Franceinfo", "category": "FRANCE & MONDE", "url": "https://www.francetvinfo.fr/titres.rss"},
+    {"id": "dauphine", "name": "Le Dauphiné Libéré", "category": "ISÈRE", "url": "https://www.ledauphine.com/isere/rss"},
+    {"id": "secours", "name": "Secours Mag", "category": "POMPIERS & SECOURS", "url": "https://www.secoursmag.fr/feed/"}
+  ]
+}
