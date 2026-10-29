@@ -4,6 +4,30 @@ const demo = new URLSearchParams(location.search).get('demo') === '1';
 let config = {slideSeconds:20, refreshSeconds:900, maxAgeHours:72};
 let articles = [], active = 0, started = performance.now(), sources = [], generatedAt = null, lastPayload = null;
 let refreshFailed = false;
+const progressKey = 'fil-info-progress-v1:' + location.pathname;
+let savedProgress = readProgress();
+let rotationHidden = document.hidden;
+let hasPresentedArticle = false;
+function readProgress(){
+  if(demo)return null;
+  try{const value=JSON.parse(localStorage.getItem(progressKey));return value?.version===1&&Array.isArray(value.nextIds)&&Number.isInteger(value.nextIndex)&&value.nextIndex>=0?value:null;}catch{return null;}
+}
+function rememberProgress(){
+  if(demo||!articles.length||rotationHidden)return;
+  hasPresentedArticle=true;
+  const nextIds=Array.from({length:articles.length},(_,i)=>articles[(active+i+1)%articles.length].id);
+  savedProgress={version:1,nextIds,nextIndex:(active+1)%articles.length};
+  try{localStorage.setItem(progressKey,JSON.stringify(savedProgress));}catch{}
+}
+function resumeIndex(list,progress){
+  if(!list.length||!progress)return 0;
+  for(const id of progress.nextIds){const index=list.findIndex(a=>a.id===id);if(index>=0)return index;}
+  return progress.nextIndex%list.length;
+}
+function nextArticle(){
+  if(!articles.length)return;
+  active=(active+1)%articles.length;started=performance.now();render();
+}
 const dateFormat = new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',day:'numeric',month:'long',weekday:'long'});
 const timeFormat = new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'});
 const stampFormat = new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
@@ -21,6 +45,7 @@ function render(){
     $('article-link').hidden=true;$('up-next').replaceChildren();$('counter').textContent='— / —';$('ticker').textContent='En attente de nouvelles actualités.';return;
   }
   const a=articles[active];$('category').textContent=a.category;$('source').textContent=sourceStamp(a);$('headline').textContent=a.title;$('summary').textContent=a.summary||'';
+  rememberProgress();
   const link=safeURL(a.url);$('article-link').hidden=!link;$('article-link').href=link||'#';
   imageInto($('hero-image'),a.image);$('image-note').textContent=a.image?'IMAGE DU FLUX ÉDITEUR':'SANS PHOTO DANS LE FLUX';
   $('counter').textContent=`${String(active+1).padStart(2,'0')} / ${String(articles.length).padStart(2,'0')}`;
@@ -53,7 +78,10 @@ function applyData(data){
   const cutoff=Date.now()-config.maxAgeHours*3600000;
   const oldId=articles[active]?.id;
   articles=data.articles.filter(a=>a&&typeof a.title==='string'&&typeof a.source==='string'&&(demo||Date.parse(a.published||sources.find(s=>s.id===a.feedId)?.lastSuccess)>cutoff));
-  active=Math.max(0,articles.findIndex(a=>a.id===oldId));started=performance.now();render();ticker();freshness();
+  const preserved=articles.findIndex(a=>a.id===oldId);
+  active=preserved>=0?preserved:resumeIndex(articles,savedProgress);
+  if(preserved<0)started=performance.now();
+  render();ticker();freshness();
 }
 async function load(){
   if(demo)return;
@@ -71,7 +99,11 @@ async function init(){resize();clock();setInterval(clock,1000);addEventListener(
   if(config.title)$('brand').textContent=config.title;if(config.subtitle)$('subtitle').textContent=config.subtitle;
   document.title=config.title||'Le Fil Info';if(demo)loadDemo();else await load();
   setInterval(load,config.refreshSeconds*1000);
-  setInterval(()=>{if(!articles.length)return;const elapsed=performance.now()-started;$('progress').style.width=Math.min(100,elapsed/(config.slideSeconds*10))+'%';if(elapsed>=config.slideSeconds*1000){active=(active+1)%articles.length;started=performance.now();render();}},100);
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){rotationHidden=true;return;}
+    if(rotationHidden){rotationHidden=false;if(hasPresentedArticle)nextArticle();else{started=performance.now();render();}}
+  });
+  setInterval(()=>{if(!articles.length||rotationHidden)return;const elapsed=performance.now()-started;$('progress').style.width=Math.min(100,elapsed/(config.slideSeconds*10))+'%';if(elapsed>=config.slideSeconds*1000)nextArticle();},100);
   setInterval(()=>{if(lastPayload)applyData(lastPayload);else freshness();},60000);
 }
 init();
