@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src 'self' blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src https://docs.google.com 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src 'self' blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Anniversaire Heyrieux Anime</title>
 <style>:root {
   color-scheme: light dark;
@@ -2487,7 +2487,7 @@ const pause=root.querySelector('.hb-pause');pause.addEventListener('click',()=>{
 #heyrieux-birthday-preview .hb-stage.hb-paused .hb-gyro-reflection,#heyrieux-birthday-preview .hb-stage.hb-paused .hb-gyro-beam{animation-play-state:paused}
 @media(prefers-reduced-motion:reduce){#heyrieux-birthday-preview .hb-gyro-reflection,#heyrieux-birthday-preview .hb-gyro-beam{animation:none;opacity:0}}
 </style><style>
-html,body{width:100%;height:100%;overflow:hidden;background:#100d0a!important}
+html,html>body{width:100%;height:100%;overflow:hidden;background:#100d0a!important}
 body{display:grid;place-items:center;padding:0!important}
 #heyrieux-birthday-preview{width:min(100vw,177.777778vh)}
 #heyrieux-birthday-preview .hb-top,#heyrieux-birthday-preview .hb-controls,#heyrieux-birthday-preview .hb-demo{display:none}
@@ -2505,16 +2505,53 @@ document.querySelector('.hb-firstname').textContent=person.prenom;
 document.querySelector('.hb-lastname').textContent=person.nom;
 stage.style.visibility='visible';
 }
-async function refresh(){
+async function cachedFallback(){
 try{
 const response=await fetch('anniversaires.json?t='+Date.now(),{cache:'no-store'});
-if(!response.ok)throw Error();
 const data=await response.json();
 if(data.status!=='ok'||data.date!==today()||!Array.isArray(data.people))return news();
-const list=data.people.filter(p=>typeof p.prenom==='string'&&typeof p.nom==='string'&&p.prenom.trim()&&p.nom.trim());
-if(!list.length)return news();
-people=list;dateKey=data.date;index=index%people.length;show();
+apply(data.people);
 }catch(e){news();}
+}
+function apply(list){
+people=list.filter(p=>typeof p.prenom==='string'&&typeof p.nom==='string'&&p.prenom.trim()&&p.nom.trim());
+if(!people.length)return news();
+dateKey=today();index=index%people.length;show();
+}
+function birthdayMatches(cell){
+if(!cell)return false;
+const v=String(cell.v||'');
+let m=v.match(/^Date\((\d{4}),\s*(\d{1,2}),\s*(\d{1,2})\)$/);
+let day,month;
+if(m){day=Number(m[3]);month=Number(m[2])+1;}
+else{
+const text=String(cell.f||cell.v||'').trim();
+m=text.match(/^(\d{1,2})[/.\-](\d{1,2})(?:[/.\-]\d{4})?$/);
+if(m){day=Number(m[1]);month=Number(m[2]);}
+else{m=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return false;day=Number(m[3]);month=Number(m[2]);}
+}
+return today().slice(5)===String(month).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+}
+let pending=false,sequence=0;
+function refresh(){
+if(pending)return;
+pending=true;
+const script=document.createElement('script'),callback='heyrieuxSheet'+(++sequence);
+let settled=false;
+const clean=()=>{pending=false;clearTimeout(timer);script.remove();delete window[callback];};
+const fail=()=>{if(settled)return;settled=true;clean();cachedFallback();};
+const timer=setTimeout(fail,15000);
+window[callback]=data=>{
+if(settled)return;settled=true;clean();
+try{
+if(data.status!=='ok'||!data.table||!Array.isArray(data.table.rows))return cachedFallback();
+const list=data.table.rows.filter(r=>birthdayMatches((r.c||[])[2])).map(r=>({nom:String(r.c[0]?.v||'').trim(),prenom:String(r.c[1]?.v||'').trim()}));
+apply(list);
+}catch(e){cachedFallback();}
+};
+script.onerror=fail;
+script.src='https://docs.google.com/spreadsheets/d/1nzY39q6GzWgCNj2cx2KwxpBIGjjy60cJae8UfNcQgR8/gviz/tq?gid=0&headers=1&tqx=responseHandler:'+callback+'&cache='+Date.now();
+document.head.append(script);
 }
 refresh();
 setInterval(refresh,60000);
