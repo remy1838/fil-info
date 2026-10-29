@@ -1801,7 +1801,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/script&gt;
 &lt;div id=&quot;heyrieux-birthday-preview&quot;&gt;
   &lt;div class=&quot;hb-top&quot;&gt;&lt;span&gt;APERÇU ANIMÉ&lt;/span&gt;&lt;span&gt;1920 × 1080 · HEYRIEUX&lt;/span&gt;&lt;/div&gt;
-  &lt;section class=&quot;hb-stage hb-playing&quot; aria-label=&quot;Affiche d’anniversaire animée de la caserne de Heyrieux&quot;&gt;
+  &lt;section class=&quot;hb-stage hb-playing&quot; aria-label=&quot;Affiche d’anniversaire animée de la caserne de Heyrieux&quot;&gt;&lt;div class=&quot;hb-bunting&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;hb-cake&quot; aria-hidden=&quot;true&quot;&gt;&lt;div class=&quot;hb-cake-base&quot;&gt;&lt;/div&gt;&lt;div class=&quot;hb-icing&quot;&gt;&lt;/div&gt;&lt;div class=&quot;hb-candle&quot;&gt;&lt;/div&gt;&lt;div class=&quot;hb-candle&quot;&gt;&lt;/div&gt;&lt;div class=&quot;hb-candle&quot;&gt;&lt;/div&gt;&lt;div class=&quot;hb-cake-plate&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;hb-sparkles&quot; aria-hidden=&quot;true&quot;&gt;✦&lt;/div&gt;
     &lt;div class=&quot;hb-blue-light&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;&lt;div class=&quot;hb-red-light&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;hb-rings&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;hb-balloon hb-balloon-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
@@ -1877,7 +1877,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 (()=&gt;{
 const root=document.getElementById(&#x27;heyrieux-birthday-preview&#x27;);
 const stage=root.querySelector(&#x27;.hb-stage&#x27;),confetti=root.querySelector(&#x27;.hb-confetti&#x27;);
-for(let i=0;i&lt;34;i++){const piece=document.createElement(&#x27;i&#x27;);piece.style.left=((i*37)%101)+&#x27;%&#x27;;piece.style.animationDuration=(8+(i%8))+&#x27;s&#x27;;piece.style.animationDelay=(-i*.83)+&#x27;s&#x27;;piece.style.background=[&#x27;#edc578&#x27;,&#x27;#d34254&#x27;,&#x27;#b9c9dc&#x27;][i%3];piece.style.width=(3+i%4)+&#x27;px&#x27;;piece.style.height=(6+i%8)+&#x27;px&#x27;;confetti.append(piece);}
+for(let i=0;i&lt;60;i++){const piece=document.createElement(&#x27;i&#x27;);piece.style.left=((i*37)%101)+&#x27;%&#x27;;piece.style.animationDuration=(8+(i%8))+&#x27;s&#x27;;piece.style.animationDelay=(-i*.83)+&#x27;s&#x27;;piece.style.background=[&#x27;#eeb751&#x27;,&#x27;#e56697&#x27;,&#x27;#60bbaf&#x27;,&#x27;#ad7cce&#x27;,&#x27;#f18b58&#x27;][i%5];piece.style.width=(3+i%4)+&#x27;px&#x27;;piece.style.height=(6+i%8)+&#x27;px&#x27;;confetti.append(piece);}
 const first=root.querySelector(&#x27;.hb-first-input&#x27;),last=root.querySelector(&#x27;.hb-last-input&#x27;);
 const update=()=&gt;{root.querySelector(&#x27;.hb-firstname&#x27;).textContent=first.value.trim()||&#x27;Joris&#x27;;root.querySelector(&#x27;.hb-lastname&#x27;).textContent=(last.value.trim()||&#x27;La petite bite poilue&#x27;);};
 first.addEventListener(&#x27;input&#x27;,update);last.addEventListener(&#x27;input&#x27;,update);
@@ -2471,7 +2471,54 @@ const pause=root.querySelector(&#x27;.hb-pause&#x27;);pause.addEventListener(&#x
 })();
 &lt;/script&gt;
 
-&lt;/body&gt;
+
+&lt;style id=&quot;birthday-joyful-theme&quot;&gt;
+#heyrieux-birthday-preview .hb-stage{background:radial-gradient(ellipse at 15% 10%,#ffe5a3 0,transparent 45%),radial-gradient(ellipse at 90% 85%,#ffd8db 0,transparent 47%),linear-gradient(125deg,#fffaf0,#fff1e4 55%,#fff9e9);border:1px solid #f5d8aa}
+#heyrieux-birthday-preview .hb-content{padding:5% 12% 4%;justify-content:center}
+#heyrieux-birthday-preview .hb-station{color:#864373;font-weight:700;margin-bottom:2.5%;letter-spacing:3px}
+#heyrieux-birthday-preview .hb-station&gt;span{background:linear-gradient(90deg,transparent,#c77a85)}
+#heyrieux-birthday-preview .hb-kicker{color:#8c687b;font-size:clamp(8px,1.15vw,13px);font-weight:600;letter-spacing:1.4px}
+#heyrieux-birthday-preview .hb-greeting{color:#df4f6b;text-shadow:0 4px #fff,0 10px 30px #e7927d35;font-size:clamp(34px,7.8vw,90px);margin:1% 0 3%;font-weight:700}
+#heyrieux-birthday-preview .hb-greeting&gt;span{color:#a24ab8;font-weight:400}
+#heyrieux-birthday-preview .hb-name-frame{background:#fffcf5e8;border:2px solid #f0b95d;box-shadow:0 10px 35px #d2a06a22,inset 0 1px #fff;min-width:70%;padding:2% 5%;border-radius:15px}
+#heyrieux-birthday-preview .hb-name{color:#3e4768;line-height:1.2}
+#heyrieux-birthday-preview .hb-firstname{display:block;color:#ac458e;font-size:1.25em;margin-bottom:5px}
+#heyrieux-birthday-preview .hb-lastname{display:block;font-size:.7em;letter-spacing:.4px;color:#5f5272}
+#heyrieux-birthday-preview .hb-wish{color:#80604e;margin-top:3%;font-weight:500}
+#heyrieux-birthday-preview .hb-signature{color:#ae7c75;margin-top:2%}
+#heyrieux-birthday-preview .hb-demo{color:#a18483}
+#heyrieux-birthday-preview .hb-rings{border-color:#e9bc8022;box-shadow:0 0 0 30px #f6cc730c,0 0 0 85px #f6cc7308}
+#heyrieux-birthday-preview .hb-blue-light{background:#a0dada;opacity:.22;filter:blur(35px)}
+#heyrieux-birthday-preview .hb-red-light{background:#ffa6b3;opacity:.25;filter:blur(35px)}
+#heyrieux-birthday-preview .hb-balloon{background:radial-gradient(ellipse at 30% 23%,#fff7cb,#ffcd58 22%,#e99a36 70%,#d67a31);box-shadow:inset -8px -7px 20px #bf702929,5px 10px 20px #d79a4730}
+#heyrieux-birthday-preview .hb-balloon-left-small{background:radial-gradient(ellipse at 28% 24%,#ffd3e6,#f36d9d 30%,#cb397b 85%)}
+#heyrieux-birthday-preview .hb-balloon-right{background:radial-gradient(ellipse at 28% 24%,#bafff5,#5dd3c6 30%,#34a8a2 85%)}
+#heyrieux-birthday-preview .hb-balloon-right-small{background:radial-gradient(ellipse at 28% 24%,#eed8ff,#bd86e7 30%,#8b58bd 85%)}
+#heyrieux-birthday-preview .hb-balloon:after{background:#c59b7866}
+#heyrieux-birthday-preview .hb-confetti i{opacity:.9}
+#heyrieux-birthday-preview .hb-shine{background:linear-gradient(90deg,transparent,#ffda8b70,transparent)}
+#heyrieux-birthday-preview .hb-bunting{position:absolute;top:3.5%;left:10%;right:10%;height:11%;display:flex;justify-content:space-around;z-index:2;border-top:1px solid #cfa586;transform:rotate(-1deg)}
+#heyrieux-birthday-preview .hb-bunting span{display:block;width:4.5%;height:70%;clip-path:polygon(0 0,100% 0,50% 100%);background:#f091b4;transform-origin:50% 0;animation:hb-pennant 3.5s ease-in-out infinite}
+#heyrieux-birthday-preview .hb-bunting span:nth-child(3n){background:#80cfc4;animation-delay:-1s}
+#heyrieux-birthday-preview .hb-bunting span:nth-child(3n + 1){background:#edbd62;animation-delay:-2s}
+#heyrieux-birthday-preview .hb-bunting span:nth-child(4n){background:#b68ddd}
+#heyrieux-birthday-preview .hb-cake{position:absolute;right:5%;bottom:7%;width:10%;height:17%;z-index:2;animation:hb-cake-bounce 5s ease-in-out infinite}
+#heyrieux-birthday-preview .hb-cake-base{position:absolute;bottom:8%;left:5%;width:90%;height:52%;border-radius:12% 12% 8% 8%;background:repeating-linear-gradient(0deg,#ed97af 0%,#ed97af 22%,#ffefcf 22%,#ffefcf 36%);box-shadow:0 8px 16px #a16a6130}
+#heyrieux-birthday-preview .hb-icing{position:absolute;bottom:49%;left:3%;width:94%;height:17%;background:#fffdf6;border-radius:40% 40% 20% 20%;box-shadow:0 4px #fbd6cb}
+#heyrieux-birthday-preview .hb-candle{position:absolute;bottom:63%;width:7%;height:24%;border-radius:2px;background:repeating-linear-gradient(35deg,#a479d0 0px,#a479d0 5px,#e0c6f0 5px,#e0c6f0 9px)}
+#heyrieux-birthday-preview .hb-candle:nth-child(3){left:27%}
+#heyrieux-birthday-preview .hb-candle:nth-child(4){left:47%;height:30%}
+#heyrieux-birthday-preview .hb-candle:nth-child(5){left:67%}
+#heyrieux-birthday-preview .hb-candle:before{content:&#x27;&#x27;;position:absolute;bottom:110%;left:-15%;width:130%;height:45%;background:#ffc047;box-shadow:0 0 12px #ffbf5080;border-radius:65% 30% 60% 35%;animation:hb-flame .9s ease-in-out infinite alternate}
+#heyrieux-birthday-preview .hb-cake-plate{position:absolute;bottom:2%;left:0;width:100%;height:9%;background:#aecdc7;border-radius:50%}
+#heyrieux-birthday-preview .hb-sparkles{position:absolute;left:5%;bottom:8%;width:8%;height:12%;color:#e9b456;font-size:clamp(24px,5vw,58px);z-index:2;animation:hb-star-twinkle 2.8s ease-in-out infinite}
+@keyframes hb-pennant{0%,100%{rotate:-5deg}50%{rotate:5deg}}
+@keyframes hb-cake-bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+@keyframes hb-flame{from{transform:scale(.9) rotate(-8deg)}to{transform:scale(1.1) rotate(8deg)}}
+@keyframes hb-star-twinkle{0%,100%{opacity:.4;scale:.85}50%{opacity:1;scale:1.1}}
+@media(max-width:480px){#heyrieux-birthday-preview .hb-content{padding:8% 11% 5%}#heyrieux-birthday-preview .hb-station{font-size:8px;letter-spacing:1px}#heyrieux-birthday-preview .hb-kicker{font-size:7px;letter-spacing:.3px}#heyrieux-birthday-preview .hb-greeting{font-size:34px;margin:1% 0 2%;line-height:.93}#heyrieux-birthday-preview .hb-name{font-size:17px}#heyrieux-birthday-preview .hb-name-frame{padding:2% 4%;border-radius:8px}#heyrieux-birthday-preview .hb-wish{font-size:8px}#heyrieux-birthday-preview .hb-signature{font-size:6px}#heyrieux-birthday-preview .hb-firstname{margin-bottom:2px}}
+@media(prefers-reduced-motion:reduce){#heyrieux-birthday-preview *,#heyrieux-birthday-preview *:before{animation:none!important}}
+&lt;/style&gt;&lt;/body&gt;
 &lt;/html&gt;
 "></iframe>
 
