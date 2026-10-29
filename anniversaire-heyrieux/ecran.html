@@ -2499,11 +2499,19 @@ const stage=document.querySelector('.hb-stage');
 let people=[], index=0, dateKey='';
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const news=()=>location.replace('../');
+let presentedPerson='';
 function show(){
 const person=people[index % people.length];
+const key=JSON.stringify([person.prenom,person.nom]);
 document.querySelector('.hb-firstname').textContent=person.prenom;
 document.querySelector('.hb-lastname').textContent=person.nom;
 stage.style.visibility='visible';
+if(key!==presentedPerson){
+presentedPerson=key;
+stage.classList.remove('hb-playing','hb-person-intro');
+void stage.offsetWidth;
+stage.classList.add('hb-playing','hb-person-intro');
+}
 }
 async function cachedFallback(){
 try{
@@ -2561,5 +2569,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
 </script><style id="birthday-name-elegant">
 #heyrieux-birthday-preview .hb-name{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:600;font-size:5.5cqw;letter-spacing:.015em;line-height:1.15;color:#fff0ce;text-shadow:0 2px 2px #45261380,0 5px 24px #0009}
 #heyrieux-birthday-preview .hb-firstname,#heyrieux-birthday-preview .hb-lastname{display:inline;font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit}
+</style><style id="birthday-person-presentation">
+#heyrieux-birthday-preview .hb-stage.hb-person-intro{animation:hb-person-arrive 1.1s ease-out both}
+@keyframes hb-person-arrive{from{opacity:0;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}
 </style></body>
 </html>
