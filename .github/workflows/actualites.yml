@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '17 * * * *'
+    - cron: '0 22,23 * * *'
 permissions:
   contents: read
   pages: write
@@ -35,6 +36,9 @@ jobs:
         run: |
           mkdir -p public/anniversaire-heyrieux
           cp anniversaire-heyrieux/index.html public/anniversaire-heyrieux/index.html
+          cp anniversaire-heyrieux/ecran.html public/anniversaire-heyrieux/ecran.html
+      - name: Actualiser les anniversaires
+        run: python scripts/update_birthdays.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
