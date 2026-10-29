@@ -31,6 +31,10 @@ jobs:
           restore-keys: rss-
       - name: Récupérer les actualités
         run: python scripts/update_news.py
+      - name: Préparer l’aperçu anniversaires
+        run: |
+          mkdir -p public/anniversaire-heyrieux
+          cp anniversaire-heyrieux/index.html public/anniversaire-heyrieux/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
