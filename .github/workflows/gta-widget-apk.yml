@@ -1,7 +1,7 @@
 name: Compiler le widget GTA VI Samsung
 on:
   push:
-    branches: [main]
+    branches: [gta-vi-widget]
     paths:
       - 'gta6/android-widget/**'
       - 'gta6/widget.json'
