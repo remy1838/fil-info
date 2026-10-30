@@ -88,7 +88,7 @@ footer{font-size:1.5cqh}
 <div class="center" role="timer" aria-label="Temps restant avant le 19 novembre 2026 à minuit à Paris">
 <div class="days" id="days">—</div><div class="days-label" id="daysLabel">JOURS</div>
 <div class="small-timer" id="smallTimer">
-<div class="part"><b id="hours">—</b><span>HEURES</span></div>
+<div class="part"><b id="hours">—</b><span>HEURES TOTALES</span></div>
 <div class="part"><b id="minutes">—</b><span>MINUTES</span></div>
 <div class="part"><b id="seconds">—</b><span>SECONDES</span></div>
 </div><div id="released">BIENVENUE<br>À VICE CITY</div>
@@ -107,7 +107,7 @@ const parisHour=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',hour:'2
 function slotFor(now){return Math.floor(Number(parisHour.format(new Date(now)))/8);}
 function remaining(now){
 const t=Math.max(0,Math.floor((release-now)/1000));
-return {days:Math.floor(t/86400),hours:Math.floor(t%86400/3600),minutes:Math.floor(t%3600/60),seconds:t%60};
+return {days:Math.floor(t/86400),hours:Math.floor(t/3600),minutes:Math.floor(t%3600/60),seconds:t%60};
 }
 let activeSlot=-1;
 function update(){
