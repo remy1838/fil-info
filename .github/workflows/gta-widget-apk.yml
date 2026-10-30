@@ -54,7 +54,6 @@ jobs:
           script: |
             adb install -r gta6/android-widget/app/build/outputs/apk/debug/app-debug.apk
             adb install -r gta6/android-widget/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-            adb shell date 103015302026.00
             adb shell am instrument -w fr.remy.gtaviwidget.test/fr.remy.gtaviwidget.TickInstrumentation | tee /tmp/gta-test.txt
             grep -q "PASS: native RemoteViews" /tmp/gta-test.txt
             adb shell screencap -p /sdcard/widget-preview.png
