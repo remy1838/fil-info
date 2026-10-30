@@ -25,7 +25,7 @@ public final class Config {
    return new Config(json);
   }catch(Exception e){try{return new Config(readAsset(c,"widget.json"));}catch(Exception fatal){throw new IllegalStateException(fatal);}}
  }
- static String readAsset(Context c,String n)throws Exception{try(InputStream in=c.getAssets().open(n)){return new String(in.readAllBytes(),StandardCharsets.UTF_8);}}
+ static String readAsset(Context c,String n)throws Exception{try(InputStream in=c.getAssets().open(n)){ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] b=new byte[8192];int n;while((n=in.read(b))!=-1)out.write(b,0,n);return out.toString("UTF-8");}}
  static byte[] fetch(String url)throws Exception{
   if(!url.startsWith("https://remy1838.github.io/fil-info/gta6/")&&!url.startsWith("https://www.rockstargames.com/VI/"))throw new SecurityException("Source non autorisée");
   HttpURLConnection cn=(HttpURLConnection)new URL(url).openConnection();cn.setConnectTimeout(7000);cn.setReadTimeout(10000);cn.setRequestProperty("User-Agent","GTA-VI-Widget/1.0");
@@ -34,7 +34,16 @@ public final class Config {
   }finally{cn.disconnect();}
  }
  public static void sync(Context c)throws Exception{
-  byte[] bytes=fetch(PAGE+"widget.json");Config next=new Config(new String(bytes,StandardCharsets.UTF_8));
+  String html=new String(fetch(PAGE),StandardCharsets.UTF_8);
+  java.util.regex.Matcher date=java.util.regex.Pattern.compile("const release=Date\\.parse\\('([^']+)'\\)").matcher(html);
+  java.util.regex.Matcher media=java.util.regex.Pattern.compile("const media='([^']+)'").matcher(html);
+  java.util.regex.Matcher artworks=java.util.regex.Pattern.compile("const artworks=\\[([\\s\\S]*?)\\]").matcher(html);
+  java.util.regex.Matcher logoMatch=java.util.regex.Pattern.compile("<img class=\"logo\"[^>]+src=\"([^\"]+)\"").matcher(html);
+  if(!date.find()||!media.find()||!artworks.find()||!logoMatch.find())throw new IOException("Format de page modifié");
+  java.util.regex.Matcher names=java.util.regex.Pattern.compile("'([^']+)'").matcher(artworks.group(1));
+  JSONArray urls=new JSONArray();while(names.find())urls.put(media.group(1)+names.group(1)+"?akim=1&imdensity=1&imwidth=1280");
+  JSONObject data=new JSONObject();data.put("pageUrl",PAGE);data.put("release",date.group(1));data.put("images",urls);data.put("logo",logoMatch.group(1).replace("&amp;","&"));
+  byte[] bytes=data.toString().getBytes(StandardCharsets.UTF_8);Config next=new Config(data.toString());
   // Download and validate everything before publishing a new set.
   byte[][] all=new byte[4][];
   for(int i=0;i<3;i++)all[i]=fetch(next.images[i]);all[3]=fetch(next.logo);
