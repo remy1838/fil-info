@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#15101d"><title>GTA VI · Compte à rebours France</title>
-<meta name="description" content="GTA VI : compte à rebours pour la France, visuels officiels et musique du trailer.">
+<meta name="description" content="GTA VI : compte à rebours pour la France, visuels officiels.">
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#15101d;color:white;font-family:Arial,Helvetica,sans-serif}body{overflow:hidden}
 .widget{position:relative;isolation:isolate;width:100%;height:100%;min-height:150px;overflow:hidden}
@@ -80,15 +80,8 @@ footer{left:5%;right:5%;bottom:3%;font-size:1.5cqh}
 <div class="part"><b id="seconds">—</b><span>SECONDES</span></div>
 </div><div id="released">BIENVENUE<br>À VICE CITY</div>
 </div>
-<button class="music" id="music" type="button" aria-haspopup="dialog">♫ Écouter la musique GTA VI</button>
 <footer><span>Heure du PlayStation Store français · Paris</span><a href="https://www.rockstargames.com/VI/media/artwork-wallpapers" target="_blank" rel="noopener">Visuels © Rockstar Games · Fan widget</a></footer>
 </main>
-<dialog id="musicDialog" aria-labelledby="musicTitle">
-<button class="close" id="closeMusic" type="button" aria-label="Fermer la musique">×</button>
-<h2 id="musicTitle">Hot Together</h2><p>The Pointer Sisters · Musique du trailer 2 de GTA VI</p>
-<div id="player"></div><p>Si la lecture ne démarre pas, touche ▶ dans le lecteur.</p>
-<a href="https://www.youtube.com/watch?v=H3Aay-47ZT0" target="_blank" rel="noopener">Écouter sur YouTube ↗</a>
-</dialog>
 <script>
 const release=Date.parse('2026-11-19T00:00:00+01:00');
 const media='https://www.rockstargames.com/VI/_next/static/media/';
@@ -111,21 +104,5 @@ document.getElementById('daysLabel').textContent=t.days===1?'JOUR':'JOURS';
 const slot=slotFor(now);if(slot!==activeSlot){document.getElementById('art').src=media+artworks[slot]+'?akim=1&imdensity=1&imwidth=1920';activeSlot=slot;}
 if(now>=release){for(const id of ['days','daysLabel','smallTimer'])document.getElementById(id).style.display='none';document.getElementById('released').style.display='block';}
 }
-const dialog=document.getElementById('musicDialog');
-function openMusic(){
-if(!dialog.open)dialog.showModal();
-if(!document.getElementById('player').firstChild){
-const frame=document.createElement('iframe');
-frame.title='The Pointer Sisters — Hot Together (Official Audio)';
-frame.allow='autoplay; encrypted-media; picture-in-picture';frame.allowFullscreen=true;
-frame.src='https://www.youtube-nocookie.com/embed/H3Aay-47ZT0?autoplay=1&playsinline=1&rel=0';
-document.getElementById('player').appendChild(frame);
-}
-}
-function stopMusic(){document.getElementById('player').replaceChildren();}
-document.getElementById('music').addEventListener('click',openMusic);
-document.getElementById('closeMusic').addEventListener('click',()=>dialog.close());
-dialog.addEventListener('close',stopMusic);
-dialog.addEventListener('click',e=>{if(e.target===dialog){const b=dialog.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)dialog.close();}});
 update();setInterval(update,1000);document.addEventListener('visibilitychange',update);
 </script></body></html>
