@@ -25,7 +25,7 @@ public final class Config {
    return new Config(json);
   }catch(Exception e){try{return new Config(readAsset(c,"widget.json"));}catch(Exception fatal){throw new IllegalStateException(fatal);}}
  }
- static String readAsset(Context c,String n)throws Exception{try(InputStream in=c.getAssets().open(n)){ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] b=new byte[8192];int n;while((n=in.read(b))!=-1)out.write(b,0,n);return out.toString("UTF-8");}}
+ static String readAsset(Context c,String n)throws Exception{try(InputStream in=c.getAssets().open(n)){ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] b=new byte[8192];int count;while((count=in.read(b))!=-1)out.write(b,0,count);return out.toString("UTF-8");}}
  static byte[] fetch(String url)throws Exception{
   if(!url.startsWith("https://remy1838.github.io/fil-info/gta6/")&&!url.startsWith("https://www.rockstargames.com/VI/"))throw new SecurityException("Source non autorisée");
   HttpURLConnection cn=(HttpURLConnection)new URL(url).openConnection();cn.setConnectTimeout(7000);cn.setReadTimeout(10000);cn.setRequestProperty("User-Agent","GTA-VI-Widget/1.0");
