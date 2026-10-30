@@ -56,6 +56,8 @@ jobs:
             adb install -r gta6/android-widget/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             adb shell am instrument -w fr.remy.gtaviwidget.test/fr.remy.gtaviwidget.TickInstrumentation | tee /tmp/gta-test.txt
             grep -q "PASS: native RemoteViews" /tmp/gta-test.txt
+            adb shell am start -n fr.remy.gtaviwidget/.MainActivity
+            sleep 2
             adb shell screencap -p /sdcard/widget-preview.png
             adb pull /sdcard/widget-preview.png gta6/android-widget/widget-preview.png
       - name: Préparer le téléchargement
