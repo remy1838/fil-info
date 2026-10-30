@@ -48,6 +48,22 @@ dialog h2{font-size:18px;margin:0 30px 8px 0}dialog p{font-size:12px;color:#dfcf
 .part b{font-size:clamp(20px,11vh,28px)}
 .part span{font-size:6px;margin-top:1px}
 }
+
+/* Fixed landscape canvas for a wide Android widget. */
+html,body{height:100%;overflow:hidden}
+.widget{width:100%;height:auto;min-height:0;aspect-ratio:16/9;container-type:size}
+.art{object-position:center 40%;object-fit:cover}
+.logo{top:7%;left:5%;width:17%;height:30%}
+.date{top:7%;right:5%;font-size:2cqh;letter-spacing:.15cqh}
+.center{inset:5% 18% 9%}
+.days{font-size:min(45cqw,56cqh);line-height:.78}
+.days-label{font-size:3.3cqh;margin-top:2cqh;letter-spacing:.6em}
+.small-timer{margin-top:2.2cqh;gap:5cqw}
+.part b{font-size:7.5cqh;font-weight:700}
+.part span{font-size:1.8cqh;letter-spacing:.25cqh;margin-top:.5cqh}
+.music{left:auto;right:4%;bottom:10%;transform:none;font-size:2cqh;padding:1.5cqh 2cqh}
+footer{left:5%;right:5%;bottom:3%;font-size:1.5cqh}
+#released{font-size:8cqh}
 </style>
 </head>
 <body>
