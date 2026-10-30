@@ -32,8 +32,9 @@ public final class GtaWidget extends AppWidgetProvider {
   RemoteViews v=new RemoteViews(c.getPackageName(),R.layout.widget);
   v.setImageViewBitmap(R.id.art,render(c,conf,now,w,h));
   boolean active=now<conf.release;v.setViewVisibility(R.id.timer_panel,active?View.VISIBLE:View.GONE);
-  long base=SystemClock.elapsedRealtime()+Countdown.withinDay(conf.release,now);
-  v.setChronometerCountDown(R.id.chrono,true);v.setChronometer(R.id.chrono,base,Countdown.withinDay(conf.release,now)<3600000L?"00:%s":"%s",active);
+  long base=SystemClock.elapsedRealtime()+Countdown.remaining(conf.release,now);
+  v.setTextViewText(R.id.time_labels,"HEURES TOTALES · MINUTES · SECONDES");
+  v.setChronometerCountDown(R.id.chrono,true);v.setChronometer(R.id.chrono,base,Countdown.remaining(conf.release,now)<3600000L?"00:%s":"%s",active);
   // Chronometer is hosted by the launcher, so it ticks without waking our app each second.
   v.setTextViewTextSize(R.id.chrono,TypedValue.COMPLEX_UNIT_DIP,Math.max(20,heightDp*.11f));
   v.setTextViewTextSize(R.id.time_labels,TypedValue.COMPLEX_UNIT_DIP,Math.max(7,heightDp*.027f));
