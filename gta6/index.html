@@ -2,59 +2,90 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#161020">
-<title>GTA VI · Compte à rebours</title>
-<meta name="description" content="Le compte à rebours GTA VI, avec un visuel officiel Rockstar Games.">
+<meta name="theme-color" content="#15101d"><title>GTA VI · Compte à rebours France</title>
+<meta name="description" content="GTA VI : compte à rebours pour la France, visuels officiels et musique du trailer.">
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#161020;color:white;font-family:Arial,Helvetica,sans-serif}
-.widget{position:relative;isolation:isolate;width:100%;height:100%;min-height:120px;overflow:hidden;background:linear-gradient(135deg,#492c55,#1b132c 55%,#754858)}
-.art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;z-index:-3}
-.shade{position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(13,8,23,.92),rgba(17,11,27,.28) 75%),linear-gradient(0deg,rgba(12,8,23,.97),transparent 90%)}
-.content{width:min(100%,1000px);height:100%;margin:auto;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(16px,4vw,34px)}
-.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.wordmark{margin:0;font-size:clamp(30px,7vw,58px);font-weight:950;line-height:.82;letter-spacing:-2px;text-shadow:0 2px 12px #0007}.wordmark span{color:#f6a9cf}
-.date{font-size:clamp(9px,2vw,12px);font-weight:700;letter-spacing:1px;border:1px solid #ffffff45;padding:8px 10px;border-radius:30px;background:#130e2855;white-space:nowrap}
-.bottom{margin-top:12px}.eyebrow{font-size:clamp(9px,2.2vw,12px);font-weight:700;letter-spacing:3px;color:#f3c9e3;margin:0 0 10px}
-.timer{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(6px,2vw,16px);max-width:620px}
-.cell{padding:10px 4px 8px;text-align:center;border:1px solid #ffffff25;border-radius:12px;background:linear-gradient(135deg,#ffffff19,#ffffff06);backdrop-filter:blur(8px)}
-.num{display:block;font-size:clamp(28px,8vw,66px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px}.cell:first-child .num{color:#ffb2d8}
-.label{display:block;margin-top:5px;font-size:clamp(7px,1.7vw,10px);letter-spacing:1.6px;color:#e6d7e8}
-footer{display:flex;justify-content:space-between;gap:8px;font-size:8px;color:#c5b4cb;margin-top:10px}footer a{color:inherit;text-decoration:none}
-#released{display:none;font-size:clamp(20px,5vw,42px);font-weight:900;color:#ffb2d8;padding:12px 0}
-@media(min-aspect-ratio:2/1){.content{padding:14px 22px}.wordmark{font-size:34px}.eyebrow{margin-bottom:6px}.cell{padding:7px 4px}.num{font-size:clamp(26px,8vh,50px)}.label{font-size:8px}footer{margin-top:6px;font-size:7px}}
-@media(max-height:230px){.content{padding:12px 16px}.wordmark{font-size:28px}.date{padding:6px 8px;font-size:9px}.bottom{margin-top:5px}.eyebrow{font-size:8px;letter-spacing:2px;margin-bottom:6px}.cell{padding:6px 3px;border-radius:8px}.num{font-size:30px}.label{font-size:7px;margin-top:3px}footer{font-size:6px;margin-top:5px}}
-@media(min-height:650px){.content{justify-content:flex-end;gap:26px;padding-bottom:8vh}.art{object-position:60% center}.shade{background:linear-gradient(0deg,#100b20 3%,#100b20b0 48%,#100b2010 100%)}.top{align-items:end}.wordmark{font-size:70px}.timer{max-width:none}.num{font-size:clamp(36px,9vw,80px)}}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#15101d;color:white;font-family:Arial,Helvetica,sans-serif}body{overflow:hidden}
+.widget{position:relative;isolation:isolate;width:100%;height:100%;min-height:150px;overflow:hidden}
+.art,.shade{position:absolute;inset:0;width:100%;height:100%;z-index:-3}.art{object-fit:cover;object-position:center 40%}.shade{z-index:-2;background:linear-gradient(0deg,#100b1ddd 0%,#100b1d12 65%,#100b1d66 100%)}
+.logo{position:absolute;top:5%;left:6%;width:clamp(76px,19vw,180px);height:20%;object-fit:contain;object-position:top left;filter:drop-shadow(0 4px 14px #0008)}
+.date{position:absolute;top:6%;right:6%;font-size:clamp(8px,1.8vw,12px);font-weight:700;letter-spacing:1.3px;text-align:right;line-height:1.7;text-shadow:0 2px 6px #000}
+.center{position:absolute;inset:26% 4% 12%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-shadow:0 3px 30px #0003}
+.days{font-weight:850;line-height:.78;letter-spacing:-.075em;padding-right:.075em;font-size:min(43vw,45vh);font-variant-numeric:tabular-nums;color:#fff}
+.days-label{font-size:clamp(12px,3.3vw,27px);font-weight:600;letter-spacing:.6em;padding-left:.6em;margin-top:4vh}
+.small-timer{display:flex;align-items:start;gap:clamp(18px,6vw,55px);margin-top:3vh}
+.part{text-align:center}.part b{display:block;font-size:clamp(15px,4vw,28px);font-weight:500;font-variant-numeric:tabular-nums}.part span{display:block;font-size:clamp(6px,1.6vw,9px);letter-spacing:2px;margin-top:5px;color:#fffC}
+footer{position:absolute;left:6%;right:6%;bottom:2.5%;display:flex;justify-content:space-between;gap:12px;font-size:7px;color:#fff9}footer a{color:inherit;text-decoration:none}
+.music{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);border:1px solid #fff7;border-radius:30px;background:#1c14258a;color:#fff;padding:9px 15px;font-size:11px;cursor:pointer;backdrop-filter:blur(10px);white-space:nowrap}
+.music:focus-visible,.close:focus-visible{outline:3px solid #f5a6d3;outline-offset:4px}
+dialog{width:min(92vw,430px);padding:20px;border:1px solid #ffffff36;border-radius:20px;background:#1b1524;color:#fff;box-shadow:0 20px 80px #0008}dialog::backdrop{background:#090610aa;backdrop-filter:blur(5px)}
+dialog h2{font-size:18px;margin:0 30px 8px 0}dialog p{font-size:12px;color:#dfcfe4;line-height:1.5}dialog iframe{border:0;width:100%;aspect-ratio:16/9;display:block;border-radius:10px}dialog a{color:#fbb9d9;font-size:12px}.close{position:absolute;top:10px;right:10px;background:transparent;color:#fff;border:0;font-size:25px;cursor:pointer}
+#released{font-size:clamp(30px,8vw,70px);font-weight:800;text-align:center;display:none}
+@media(min-aspect-ratio:1.6/1){.logo{height:28%;width:18%;top:8%}.center{inset:10% 20% 12%}.days{font-size:min(32vw,52vh)}.days-label{font-size:clamp(10px,3vh,22px);margin-top:3vh}.small-timer{margin-top:3vh;gap:4vw}.part b{font-size:clamp(14px,4vh,26px)}.part span{font-size:7px}.date{top:8%;font-size:9px}.music{left:auto;right:5%;bottom:12%;transform:none;font-size:9px;padding:7px 10px}.art{object-position:center 40%}}
+@media(max-height:250px){.center{inset:12% 20% 9%}.days{font-size:52vh}.days-label{font-size:10px;letter-spacing:.4em;margin-top:8px}.small-timer{margin-top:8px;gap:20px}.part b{font-size:13px}.part span{font-size:5px;margin-top:2px}.date{font-size:7px;letter-spacing:.4px}.logo{top:8%;height:30%}.music{font-size:7px;padding:5px 8px}footer{font-size:5px;bottom:3%}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<main class="widget" aria-label="Compte à rebours avant GTA VI">
-<img class="art" alt="" referrerpolicy="no-referrer" src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_02_landscape.0cosv-uzbpt91.jpg?akim=1&amp;imdensity=1&amp;imwidth=1920">
+<main class="widget" aria-label="Compte à rebours GTA VI France">
+<img class="art" id="art" alt="" referrerpolicy="no-referrer" src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_01_landscape.12x2gvspcm_3m.jpg?akim=1&amp;imdensity=1&amp;imwidth=1920">
 <div class="shade"></div>
-<div class="content">
-<div class="top"><h1 class="wordmark">GTA <span>VI</span></h1><div class="date">19 NOVEMBRE 2026</div></div>
-<div class="bottom"><p class="eyebrow" id="heading">DIRECTION VICE CITY</p>
-<div class="timer" id="timer" role="timer" aria-label="Temps restant">
-<div class="cell"><span class="num" id="days">—</span><span class="label">JOURS</span></div>
-<div class="cell"><span class="num" id="hours">—</span><span class="label">HEURES</span></div>
-<div class="cell"><span class="num" id="minutes">—</span><span class="label">MINUTES</span></div>
-<div class="cell"><span class="num" id="seconds">—</span><span class="label">SECONDES</span></div>
+<img class="logo" alt="Grand Theft Auto VI" referrerpolicy="no-referrer" src="https://www.rockstargames.com/VI/_next/static/media/vi.0hxa9~pf214xe.png?akim=1&amp;imdensity=1&amp;imwidth=640">
+<div class="date">19 NOVEMBRE 2026<br>00 H · FRANCE</div>
+<div class="center" role="timer" aria-label="Temps restant avant le 19 novembre 2026 à minuit à Paris">
+<div class="days" id="days">—</div><div class="days-label" id="daysLabel">JOURS</div>
+<div class="small-timer" id="smallTimer">
+<div class="part"><b id="hours">—</b><span>HEURES</span></div>
+<div class="part"><b id="minutes">—</b><span>MINUTES</span></div>
+<div class="part"><b id="seconds">—</b><span>SECONDES</span></div>
+</div><div id="released">BIENVENUE<br>À VICE CITY</div>
 </div>
-<div id="released">LE JOUR J EST ARRIVÉ</div>
-<footer><span>Décompte au 19/11 à 00 h · Paris*</span><a href="https://www.rockstargames.com/VI/" target="_blank" rel="noopener">Visuel © Rockstar Games · Fan widget</a></footer>
-</div></div>
+<button class="music" id="music" type="button" aria-haspopup="dialog">♫ Écouter la musique GTA VI</button>
+<footer><span>Heure du PlayStation Store français · Paris</span><a href="https://www.rockstargames.com/VI/media/artwork-wallpapers" target="_blank" rel="noopener">Visuels © Rockstar Games · Fan widget</a></footer>
 </main>
+<dialog id="musicDialog" aria-labelledby="musicTitle">
+<button class="close" id="closeMusic" type="button" aria-label="Fermer la musique">×</button>
+<h2 id="musicTitle">Hot Together</h2><p>The Pointer Sisters · Musique du trailer 2 de GTA VI</p>
+<div id="player"></div><p>Si la lecture ne démarre pas, touche ▶ dans le lecteur.</p>
+<a href="https://www.youtube.com/watch?v=H3Aay-47ZT0" target="_blank" rel="noopener">Écouter sur YouTube ↗</a>
+</dialog>
 <script>
-/* Repère calendaire à minuit à Paris. L'heure de lancement n'est pas affirmée. */
-const release = Date.parse('2026-11-19T00:00:00+01:00');
+const release=Date.parse('2026-11-19T00:00:00+01:00');
+const media='https://www.rockstargames.com/VI/_next/static/media/';
+const artworks=[
+'Jason_and_Lucia_01_landscape.12x2gvspcm_3m.jpg',
+'Jason_and_Lucia_02_landscape.0cosv-uzbpt91.jpg',
+'Jason_and_Lucia_Motel_landscape.08edvuwtm-20v.jpg'
+];
+const parisHour=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',hour:'2-digit',hourCycle:'h23'});
+function slotFor(now){return Math.floor(Number(parisHour.format(new Date(now)))/8);}
 function remaining(now){
- const total=Math.max(0,Math.floor((release-now)/1000));
- return {days:Math.floor(total/86400),hours:Math.floor(total%86400/3600),minutes:Math.floor(total%3600/60),seconds:total%60};
+const t=Math.max(0,Math.floor((release-now)/1000));
+return {days:Math.floor(t/86400),hours:Math.floor(t%86400/3600),minutes:Math.floor(t%3600/60),seconds:t%60};
 }
+let activeSlot=-1;
 function update(){
- const now=Date.now(), t=remaining(now);
- for(const key of ['days','hours','minutes','seconds']) document.getElementById(key).textContent=String(t[key]).padStart(2,'0');
- if(now>=release){document.getElementById('timer').style.display='none';document.getElementById('released').style.display='block';document.getElementById('heading').textContent='BIENVENUE À VICE CITY';}
+const now=Date.now(),t=remaining(now);
+for(const key of ['days','hours','minutes','seconds'])document.getElementById(key).textContent=key==='days'?String(t[key]):String(t[key]).padStart(2,'0');
+document.getElementById('daysLabel').textContent=t.days===1?'JOUR':'JOURS';
+const slot=slotFor(now);if(slot!==activeSlot){document.getElementById('art').src=media+artworks[slot]+'?akim=1&imdensity=1&imwidth=1920';activeSlot=slot;}
+if(now>=release){for(const id of ['days','daysLabel','smallTimer'])document.getElementById(id).style.display='none';document.getElementById('released').style.display='block';}
 }
+const dialog=document.getElementById('musicDialog');
+function openMusic(){
+if(!dialog.open)dialog.showModal();
+if(!document.getElementById('player').firstChild){
+const frame=document.createElement('iframe');
+frame.title='The Pointer Sisters — Hot Together (Official Audio)';
+frame.allow='autoplay; encrypted-media; picture-in-picture';frame.allowFullscreen=true;
+frame.src='https://www.youtube-nocookie.com/embed/H3Aay-47ZT0?autoplay=1&playsinline=1&rel=0';
+document.getElementById('player').appendChild(frame);
+}
+}
+function stopMusic(){document.getElementById('player').replaceChildren();}
+document.getElementById('music').addEventListener('click',openMusic);
+document.getElementById('closeMusic').addEventListener('click',()=>dialog.close());
+dialog.addEventListener('close',stopMusic);
+dialog.addEventListener('click',e=>{if(e.target===dialog){const b=dialog.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)dialog.close();}});
 update();setInterval(update,1000);document.addEventListener('visibilitychange',update);
-</script>
-</body></html>
+</script></body></html>
