@@ -83,10 +83,20 @@ function applyData(data){
   if(preserved<0)started=performance.now();
   render();ticker();freshness();
 }
+async function fetchNews(){
+  const controller=typeof AbortController==='function'?new AbortController():null;
+  let timer;
+  try{
+    return await Promise.race([
+      fetch('news.json?t='+Date.now(),{cache:'no-store',...(controller?{signal:controller.signal}:{})}),
+      new Promise((_,reject)=>{timer=setTimeout(()=>{if(controller)controller.abort();reject(Error('Délai dépassé'));},15000);})
+    ]);
+  }finally{clearTimeout(timer);}
+}
 async function load(){
   if(demo)return;
-  try{const response=await fetch('news.json?t='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error('HTTP');const data=await response.json();refreshFailed=false;applyData(data);lastPayload=data;try{localStorage.setItem('fil-info-cache',JSON.stringify(data));}catch{}}
-  catch{refreshFailed=true;if(!lastPayload){try{lastPayload=JSON.parse(localStorage.getItem('fil-info-cache'));if(lastPayload)applyData(lastPayload);}catch{}}if(!articles.length)render();freshness();}
+  try{const response=await fetchNews();if(!response.ok)throw Error('HTTP');const data=await response.json();refreshFailed=false;applyData(data);lastPayload=data;try{localStorage.setItem('fil-info-cache',JSON.stringify(data));}catch{}}
+  catch{refreshFailed=true;if(!lastPayload){try{lastPayload=JSON.parse(localStorage.getItem('fil-info-cache'));if(lastPayload)applyData(lastPayload);}catch{}}if(!articles.length)render();freshness();setTimeout(load,30000);}
 }
 function loadDemo(){
   $('demo-label').hidden=false;
