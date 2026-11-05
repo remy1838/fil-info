@@ -1,5 +1,6 @@
 """Read the shared birthday sheet; publish only today's names, never birth dates."""
 import csv, io, json, re
+from itertools import chain
 from datetime import datetime, date
 from pathlib import Path
 from urllib.request import urlopen, Request
@@ -23,8 +24,10 @@ def day_month(value):
 def select(rows, today):
     people, invalid = [], 0
     headers = next(rows, None)
-    if headers is None or [h.strip().lower() for h in headers[:3]] != ["nom", "prénom", "date de naissance"]:
-        raise ValueError("Expected columns: Nom, Prénom, Date de naissance")
+    if headers is None:
+        return people, invalid
+    if [h.strip().lower() for h in headers[:3]] != ["nom", "prénom", "date de naissance"]:
+        rows = chain([headers], rows)
     seen = set()
     for row in rows:
         if not any(c.strip() for c in row):
