@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src https://docs.google.com 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src 'self' blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src https://docs.google.com 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src 'self' blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Anniversaire Heyrieux Anime</title>
 <style>:root {
   color-scheme: light dark;
@@ -2510,13 +2510,25 @@ root.style.left=((innerWidth-1920*scale)/2)+'px';
 root.style.top=((innerHeight-1080*scale)/2)+'px';
 }
 resizeBirthday();addEventListener('resize',resizeBirthday);
-const news=()=>location.replace('../');
+const newsFrame=document.createElement('iframe');
+newsFrame.id='hb-news-fallback';
+newsFrame.title='Actualités du jour';
+newsFrame.src=new URL('../?source=anniversaire',location.href).href;
+newsFrame.setAttribute('frameborder','0');
+document.body.appendChild(newsFrame);
+function news(){
+newsFrame.hidden=false;
+stage.style.visibility='hidden';
+stage.classList.add('hb-paused');
+}
 let presentedPerson='';
 function show(){
 const person=people[index % people.length];
 const key=JSON.stringify([person.prenom,person.nom]);
 document.querySelector('.hb-firstname').textContent=person.prenom;
 document.querySelector('.hb-lastname').textContent=person.nom;
+newsFrame.hidden=true;
+stage.classList.remove('hb-paused');
 stage.style.visibility='visible';
 if(key!==presentedPerson){
 presentedPerson=key;
@@ -2587,5 +2599,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();
 </style><style id="birthday-player-layout">
 #heyrieux-birthday-preview{position:absolute;width:1920px;height:1080px;transform-origin:0 0}
 #heyrieux-birthday-preview .hb-stage{width:1920px;height:1080px;aspect-ratio:auto}
+</style><style id="birthday-news-fallback">
+#hb-news-fallback{position:fixed;left:0;top:0;width:100%;height:100%;border:0;display:block;background:#05111f;z-index:20}
+#hb-news-fallback[hidden]{display:none!important}
 </style></body>
 </html>
