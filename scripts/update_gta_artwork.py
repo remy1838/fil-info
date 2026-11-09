@@ -55,7 +55,8 @@ def update():
     if count != 1:
         raise ValueError("Countdown image array was not found; leaving page untouched")
     page = re.sub(r"\nconst latestArtworks=\[[\s\S]*?\];", "", page)
-    page = page.replace("const parisHour=", "const latestArtworks=" + json.dumps(names) + ";\nconst parisHour=", 1)
+    page = re.sub(r"\nconst artworkAnchorDay=\d+;", "", page)
+    page = page.replace("const parisHour=", "const latestArtworks=" + json.dumps(names) + ";\nconst artworkAnchorDay=" + str(anchor - 719163) + ";\nconst parisHour=", 1)
     page = re.sub(r'(<img class="art"[^>]*src=")[^"]+', lambda m: m.group(1) + BASE + selected[0] + "?akim=1&amp;imdensity=1&amp;imwidth=1920", page, count=1)
     PAGE.write_text(page)
     # The published HTML remains the app's existing synchronization source.
