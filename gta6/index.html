@@ -101,12 +101,17 @@ const media='https://www.rockstargames.com/VI/_next/static/media/';
 const artworks=[
 'Jason_Lucia_Lock_And_Load_landscape.0l9s5w7ih9p~3.jpg',
 'The_Album_Cover_Art_landscape.000ifb9a.j-gp.jpg',
-'Jason_and_Lucia_Robbery_landscape.09c8a~do21h4p.jpg'
+'Jason_and_Lucia_Robbery_landscape.09c8a~do21h4p.jpg',
+'Official_Cover_Art_landscape.12.uu2irr.2_a.jpg',
+'Jason_and_Lucia_Beach_landscape.0419q._86ukpt.jpg',
+'Jason_and_Lucia_02_landscape.0cosv-uzbpt91.jpg',
+'Jason_and_Lucia_01_landscape.12x2gvspcm_3m.jpg',
+'Jason_and_Lucia_Motel_landscape.08edvuwtm-20v.jpg'
 ];
 const latestArtworks=["Jason_Lucia_Lock_And_Load_landscape.0l9s5w7ih9p~3.jpg", "The_Album_Cover_Art_landscape.000ifb9a.j-gp.jpg", "Jason_and_Lucia_Robbery_landscape.09c8a~do21h4p.jpg", "Official_Cover_Art_landscape.12.uu2irr.2_a.jpg", "Jason_and_Lucia_Beach_landscape.0419q._86ukpt.jpg", "Jason_and_Lucia_02_landscape.0cosv-uzbpt91.jpg", "Jason_and_Lucia_01_landscape.12x2gvspcm_3m.jpg", "Jason_and_Lucia_Motel_landscape.08edvuwtm-20v.jpg", "Cal_Hampton_landscape.17k7bnt3myg.2.jpg", "Boobie_Ike_landscape.0ldnbn87k-8mq.jpg", "DreQuan_Priest_landscape.0_b7hszyze6cy.jpg", "Real_Dimez_landscape.0637akp_a5a_q.jpg"];
 const artworkAnchorDay=20766;
 const parisHour=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',hour:'2-digit',hourCycle:'h23'});
-function slotFor(now){return Math.floor(Number(parisHour.format(new Date(now)))/8);}
+function slotFor(now){return Math.floor(Number(parisHour.format(new Date(now)))/3);}
 function remaining(now){
 const t=Math.max(0,Math.floor((release-now)/1000));
 return {days:Math.floor(t/86400),hours:Math.floor(t/3600),minutes:Math.floor(t%3600/60),seconds:t%60};
@@ -117,7 +122,7 @@ function parisDay(now){
  return Math.floor(Date.UTC(get('year'),get('month')-1,get('day'))/86400000);
 }
 function artworkFor(now,slot){
- const index=((parisDay(now)-artworkAnchorDay)*3+slot)%latestArtworks.length;
+ const index=((parisDay(now)-artworkAnchorDay)*8+slot)%latestArtworks.length;
  return latestArtworks[(index+latestArtworks.length)%latestArtworks.length];
 }
 let activeSlot=-1;
