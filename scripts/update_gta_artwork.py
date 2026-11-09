@@ -20,7 +20,7 @@ def fetch_names():
         source = html.unescape(response.read().decode("utf-8"))
     found = list(dict.fromkeys(re.findall(r"([A-Za-z0-9_~-]+_landscape\.[A-Za-z0-9_.~-]+\.(?:jpg|webp|png))", source)))
     names = [name for name in found if not re.search(r"With_?Logos?", name, re.I)]
-    if len(names) < 6:
+    if len(names) < 8:
         raise ValueError("Official gallery did not expose enough landscape artwork")
     return names[:12]
 
@@ -30,7 +30,7 @@ def update():
     try:
         with urllib.request.urlopen("https://remy1838.github.io/fil-info/gta6/artwork-state.json", timeout=10) as previous:
             live = json.load(previous)
-            if len(live.get("pool", [])) >= 3:
+            if len(live.get("pool", [])) >= 8:
                 old = live
     except Exception:
         pass
@@ -38,7 +38,7 @@ def update():
         names = fetch_names()
     except Exception as exc:
         names = old.get("pool", [])
-        if len(names) < 3:
+        if len(names) < 8:
             print("Artwork refresh skipped: " + str(exc))
             return
         print("Official gallery unavailable; rotating the last verified set.")
@@ -48,8 +48,8 @@ def update():
     anchor = old.get("anchor_day", today.toordinal())
     if signature != previous_signature:
         anchor = today.toordinal()
-    start = ((today.toordinal() - anchor) * 3) % len(names)
-    selected = [names[(start + offset) % len(names)] for offset in range(3)]
+    start = ((today.toordinal() - anchor) * 8) % len(names)
+    selected = [names[(start + offset) % len(names)] for offset in range(8)]
     replacement = "const artworks=[\n" + ",\n".join("'" + name + "'" for name in selected) + "\n];"
     page, count = re.subn(r"const artworks=\[[\s\S]*?\];", lambda _: replacement, page, count=1)
     if count != 1:
