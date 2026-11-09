@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
   root=new LinearLayout(this);root.setOrientation(1);root.setPadding(dp(20),dp(18),dp(20),dp(20));scroll.addView(root);setContentView(scroll);
   scroll.setOnApplyWindowInsetsListener((v,i)->{android.graphics.Insets bars=i.getInsets(WindowInsets.Type.systemBars());v.setPadding(bars.left,bars.top,bars.right,bars.bottom);return i;});
   root.addView(text("GTA VI · Ton widget",26));
-  root.addView(text("Secondes en direct · 12 images en rotation · Nouveautés automatiques",14));
+  root.addView(text("Secondes en direct · 8 images différentes par jour · Nouveautés automatiques",14));
   preview=new FrameLayout(this);int w=(int)(getResources().getDisplayMetrics().widthPixels/getResources().getDisplayMetrics().density)-40;
   root.addView(preview,new LinearLayout.LayoutParams(-1,dp(w*.75f)));
   root.addView(text("Ton lien reste le même :",13));
@@ -34,12 +34,12 @@ public class MainActivity extends Activity {
    else Toast.makeText(this,"Appui long sur l'accueil → Widgets → GTA VI Widget",Toast.LENGTH_LONG).show();
   });
   button("Synchroniser depuis mon lien",()->{
-   state.setText("Synchronisation des trois images…");
+   state.setText("Synchronisation des huit images…");
    new Thread(()->{try{Config.sync(this);runOnUiThread(()->{state.setText("Visuels et date synchronisés.");refresh();});}
    catch(Exception e){runOnUiThread(()->state.setText("Connexion indisponible. Les visuels déjà installés restent utilisables."));}}).start();
   });
   button("Ouvrir mon lien",()->startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(Config.PAGE))));
-  root.addView(text("Le widget récupère automatiquement les nouveautés de ton lien avec une connexion Internet. Les images changent à 00 h, 08 h et 16 h. Hors connexion, les dernières images restent disponibles.",12));
+  root.addView(text("Le widget récupère automatiquement les nouveautés de ton lien avec une connexion Internet. Les images changent toutes les 3 heures, soit 8 images différentes par jour. Hors connexion, les dernières images restent disponibles.",12));
   root.addView(text("Si Samsung met l'application en veille : Paramètres → Applications → GTA VI Widget → Batterie → Non restreinte.",12));
   refresh();
  }

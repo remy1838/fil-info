@@ -8,13 +8,14 @@ public class TickInstrumentation extends Instrumentation {
    long release=OffsetDateTime.parse("2026-11-19T00:00:00+01:00").toInstant().toEpochMilli();
    if(Countdown.remaining(release,release+1)!=0)throw new AssertionError("Negative countdown");
    String[] times={"2026-10-30T07:59:59+01:00","2026-10-30T08:00:00+01:00","2026-10-30T16:00:00+01:00","2026-10-31T00:00:00+01:00"};
-   int[] slots={0,1,2,0};for(int i=0;i<times.length;i++)if(Countdown.imageSlot(OffsetDateTime.parse(times[i]).toInstant().toEpochMilli())!=slots[i])throw new AssertionError("Image slot");
+   int[] slots={2,2,5,0};for(int i=0;i<times.length;i++)if(Countdown.imageSlot(OffsetDateTime.parse(times[i]).toInstant().toEpochMilli())!=slots[i])throw new AssertionError("Image slot");
    String source;
    try(java.io.InputStream in=getContext().getAssets().open("source-page.html")){source=new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);}
    Config parsed=new Config(Config.configurationFromPage(source));
-   if(parsed.images.length!=3||!parsed.images[0].startsWith("https://www.rockstargames.com/VI/"))throw new AssertionError("Official gallery parse failed");
+   if(parsed.images.length!=8||!parsed.images[0].startsWith("https://www.rockstargames.com/VI/"))throw new AssertionError("Official gallery parse failed");
    GtaSync.schedule(getTargetContext());
    if(getTargetContext().getSystemService(android.app.job.JobScheduler.class).getPendingJob(GtaSync.PERIODIC)==null)throw new AssertionError("Background update job missing");
+   for(int hour=0;hour<24;hour+=3){long t=OffsetDateTime.parse("2026-11-09T"+String.format(java.util.Locale.ROOT,"%02d",hour)+":00:00+01:00").toInstant().toEpochMilli();if(Countdown.imageSlot(t)!=hour/3)throw new AssertionError("Eight daily slots");}
    MainActivity a=(MainActivity)startActivitySync(new Intent(getTargetContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
    waitForIdleSync();SystemClock.sleep(700);
    String[] texts=new String[2];
@@ -22,7 +23,7 @@ public class TickInstrumentation extends Instrumentation {
    SystemClock.sleep(2400);
    runOnMainSync(()->texts[1]=((Chronometer)a.findViewById(R.id.chrono)).getText().toString());
    if(texts[0].equals(texts[1]))throw new AssertionError("Native countdown frozen");
-   for(int i=0;i<3;i++)if(Config.bitmap(getTargetContext(),"image"+i+".jpg")==null)throw new AssertionError("Missing image");
+   for(int i=0;i<8;i++)if(Config.bitmap(getTargetContext(),"image"+i+".jpg")==null)throw new AssertionError("Missing image");
    if(Config.bitmap(getTargetContext(),"logo.png")==null)throw new AssertionError("Missing logo");
    result.putString("stream","PASS: native RemoteViews countdown changed from "+texts[0]+" to "+texts[1]+"; published gallery parsing, background job, Paris rotation and assets verified.\n");
    finish(Activity.RESULT_OK,result);

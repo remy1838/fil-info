@@ -10,13 +10,14 @@ public final class Config {
  public static final String PAGE="https://remy1838.github.io/fil-info/gta6/";
  public long release;
  public String pageUrl,logo;
- public String[] images=new String[3];
+ public String[] images;
  public Config(String json)throws Exception{
   JSONObject o=new JSONObject(json);release=OffsetDateTime.parse(o.getString("release")).toInstant().toEpochMilli();
   pageUrl=o.getString("pageUrl");logo=o.getString("logo");
   if(!PAGE.equals(pageUrl))throw new IllegalArgumentException("Lien non pris en charge");
-  JSONArray a=o.getJSONArray("images");if(a.length()!=3)throw new IllegalArgumentException("Trois images requises");
-  for(int i=0;i<3;i++)images[i]=a.getString(i);
+  JSONArray a=o.getJSONArray("images");if(a.length()!=8)throw new IllegalArgumentException("Huit images requises");
+  images=new String[a.length()];
+  for(int i=0;i<images.length;i++)images[i]=a.getString(i);
  }
  public static Config load(Context c){
   try{
@@ -45,12 +46,12 @@ public final class Config {
   java.util.regex.Matcher anchorMatch=java.util.regex.Pattern.compile("const artworkAnchorDay=(\\d+);").matcher(html);
   if(poolMatch.find()&&anchorMatch.find()){
    JSONArray pool=new JSONArray(poolMatch.group(1));
-   if(pool.length()>=3){
+   if(pool.length()>=8){
     long today=java.time.LocalDate.now(java.time.ZoneId.of("Europe/Paris")).toEpochDay();
     long anchor=Long.parseLong(anchorMatch.group(1));
-    int start=(int)Math.floorMod((today-anchor)*3L,(long)pool.length());
+    int start=(int)Math.floorMod((today-anchor)*8L,(long)pool.length());
     urls=new JSONArray();
-    for(int i=0;i<3;i++)urls.put(media.group(1)+pool.getString((start+i)%pool.length())+"?akim=1&imdensity=1&imwidth=1280");
+    for(int i=0;i<8;i++)urls.put(media.group(1)+pool.getString((start+i)%pool.length())+"?akim=1&imdensity=1&imwidth=1280");
    }
   }
   JSONObject data=new JSONObject();data.put("pageUrl",PAGE);data.put("release",date.group(1));data.put("images",urls);data.put("logo",logoMatch.group(1).replace("&amp;","&"));
@@ -59,10 +60,10 @@ public final class Config {
  public static void sync(Context c)throws Exception{
   byte[] bytes=configurationFromPage(new String(fetch(PAGE),StandardCharsets.UTF_8)).getBytes(StandardCharsets.UTF_8);Config next=new Config(new String(bytes,StandardCharsets.UTF_8));
   // Download and validate everything before publishing a new set.
-  byte[][] all=new byte[4][];
-  for(int i=0;i<3;i++)all[i]=fetch(next.images[i]);all[3]=fetch(next.logo);
+  byte[][] all=new byte[next.images.length+1][];
+  for(int i=0;i<next.images.length;i++)all[i]=fetch(next.images[i]);all[next.images.length]=fetch(next.logo);
   for(byte[] b:all)if(BitmapFactory.decodeByteArray(b,0,b.length)==null)throw new IOException("Image invalide");
-  for(int i=0;i<4;i++)java.nio.file.Files.write(new File(c.getFilesDir(),i==3?"logo.png":"image"+i+".jpg").toPath(),all[i]);
+  for(int i=0;i<all.length;i++)java.nio.file.Files.write(new File(c.getFilesDir(),i==next.images.length?"logo.png":"image"+i+".jpg").toPath(),all[i]);
   java.nio.file.Files.write(new File(c.getFilesDir(),"widget.json").toPath(),bytes);
  }
  public static Bitmap bitmap(Context c,String name){
