@@ -33,8 +33,7 @@ public final class Config {
    byte[] b=new byte[16384];int n;while((n=in.read(b))!=-1){if(out.size()+n>6000000)throw new IOException("Fichier trop grand");out.write(b,0,n);}return out.toByteArray();
   }finally{cn.disconnect();}
  }
- public static void sync(Context c)throws Exception{
-  String html=new String(fetch(PAGE),StandardCharsets.UTF_8);
+ public static String configurationFromPage(String html)throws Exception{
   java.util.regex.Matcher date=java.util.regex.Pattern.compile("const release=Date\\.parse\\('([^']+)'\\)").matcher(html);
   java.util.regex.Matcher media=java.util.regex.Pattern.compile("const media='([^']+)'").matcher(html);
   java.util.regex.Matcher artworks=java.util.regex.Pattern.compile("const artworks=\\[([\\s\\S]*?)\\]").matcher(html);
@@ -55,7 +54,10 @@ public final class Config {
    }
   }
   JSONObject data=new JSONObject();data.put("pageUrl",PAGE);data.put("release",date.group(1));data.put("images",urls);data.put("logo",logoMatch.group(1).replace("&amp;","&"));
-  byte[] bytes=data.toString().getBytes(StandardCharsets.UTF_8);Config next=new Config(data.toString());
+  return data.toString();
+ }
+ public static void sync(Context c)throws Exception{
+  byte[] bytes=configurationFromPage(new String(fetch(PAGE),StandardCharsets.UTF_8)).getBytes(StandardCharsets.UTF_8);Config next=new Config(new String(bytes,StandardCharsets.UTF_8));
   // Download and validate everything before publishing a new set.
   byte[][] all=new byte[4][];
   for(int i=0;i<3;i++)all[i]=fetch(next.images[i]);all[3]=fetch(next.logo);

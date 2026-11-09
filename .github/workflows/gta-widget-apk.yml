@@ -35,6 +35,10 @@ jobs:
               request=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
               with urllib.request.urlopen(request,timeout=45) as response:
                   (folder/name).write_bytes(response.read())
+          test_assets=pathlib.Path('gta6/android-widget/app/src/androidTest/assets')
+          test_assets.mkdir(parents=True,exist_ok=True)
+          with urllib.request.urlopen('https://remy1838.github.io/fil-info/gta6/',timeout=30) as response:
+              (test_assets/'source-page.html').write_bytes(response.read())
           PY
       - name: Compiler l'application
         working-directory: gta6/android-widget

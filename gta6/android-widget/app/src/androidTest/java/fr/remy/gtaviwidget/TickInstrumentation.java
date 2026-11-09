@@ -9,8 +9,10 @@ public class TickInstrumentation extends Instrumentation {
    if(Countdown.remaining(release,release+1)!=0)throw new AssertionError("Negative countdown");
    String[] times={"2026-10-30T07:59:59+01:00","2026-10-30T08:00:00+01:00","2026-10-30T16:00:00+01:00","2026-10-31T00:00:00+01:00"};
    int[] slots={0,1,2,0};for(int i=0;i<times.length;i++)if(Countdown.imageSlot(OffsetDateTime.parse(times[i]).toInstant().toEpochMilli())!=slots[i])throw new AssertionError("Image slot");
-   Config.sync(getTargetContext());
-   if(!new java.io.File(getTargetContext().getFilesDir(),"widget.json").exists())throw new AssertionError("Automatic artwork source not saved");
+   String source;
+   try(java.io.InputStream in=getContext().getAssets().open("source-page.html")){source=new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);}
+   Config parsed=new Config(Config.configurationFromPage(source));
+   if(parsed.images.length!=3||!parsed.images[0].startsWith("https://www.rockstargames.com/VI/"))throw new AssertionError("Official gallery parse failed");
    GtaSync.schedule(getTargetContext());
    if(getTargetContext().getSystemService(android.app.job.JobScheduler.class).getPendingJob(GtaSync.PERIODIC)==null)throw new AssertionError("Background update job missing");
    MainActivity a=(MainActivity)startActivitySync(new Intent(getTargetContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -22,7 +24,7 @@ public class TickInstrumentation extends Instrumentation {
    if(texts[0].equals(texts[1]))throw new AssertionError("Native countdown frozen");
    for(int i=0;i<3;i++)if(Config.bitmap(getTargetContext(),"image"+i+".jpg")==null)throw new AssertionError("Missing image");
    if(Config.bitmap(getTargetContext(),"logo.png")==null)throw new AssertionError("Missing logo");
-   result.putString("stream","PASS: native RemoteViews countdown changed from "+texts[0]+" to "+texts[1]+"; live artwork synchronization, background job, Paris rotation and assets verified.\n");
+   result.putString("stream","PASS: native RemoteViews countdown changed from "+texts[0]+" to "+texts[1]+"; published gallery parsing, background job, Paris rotation and assets verified.\n");
    finish(Activity.RESULT_OK,result);
   }catch(Throwable e){result.putString("stream","FAIL: "+e.toString()+"\n");finish(Activity.RESULT_CANCELED,result);}
  }
