@@ -37,10 +37,13 @@ jobs:
           mkdir -p public/anniversaire-heyrieux
           cp anniversaire-heyrieux/index.html public/anniversaire-heyrieux/index.html
           cp anniversaire-heyrieux/ecran.html public/anniversaire-heyrieux/ecran.html
+      - name: Actualiser les images GTA VI
+        run: python scripts/update_gta_artwork.py
       - name: Préparer le widget GTA VI
         run: |
           mkdir -p public/gta6
           cp gta6/index.html public/gta6/index.html
+          if [ -f gta6/artwork-state.json ]; then cp gta6/artwork-state.json public/gta6/artwork-state.json; fi
       - name: Actualiser les anniversaires
         run: python scripts/update_birthdays.py
       - uses: actions/configure-pages@v5
