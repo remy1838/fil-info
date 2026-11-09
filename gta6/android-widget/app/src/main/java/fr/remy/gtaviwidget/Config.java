@@ -42,6 +42,18 @@ public final class Config {
   if(!date.find()||!media.find()||!artworks.find()||!logoMatch.find())throw new IOException("Format de page modifié");
   java.util.regex.Matcher names=java.util.regex.Pattern.compile("'([^']+)'").matcher(artworks.group(1));
   JSONArray urls=new JSONArray();while(names.find())urls.put(media.group(1)+names.group(1)+"?akim=1&imdensity=1&imwidth=1280");
+  java.util.regex.Matcher poolMatch=java.util.regex.Pattern.compile("const latestArtworks=(\\[[\\s\\S]*?\\]);").matcher(html);
+  java.util.regex.Matcher anchorMatch=java.util.regex.Pattern.compile("const artworkAnchorDay=(\\d+);").matcher(html);
+  if(poolMatch.find()&&anchorMatch.find()){
+   JSONArray pool=new JSONArray(poolMatch.group(1));
+   if(pool.length()>=3){
+    long today=java.time.LocalDate.now(java.time.ZoneId.of("Europe/Paris")).toEpochDay();
+    long anchor=Long.parseLong(anchorMatch.group(1));
+    int start=(int)Math.floorMod((today-anchor)*3L,(long)pool.length());
+    urls=new JSONArray();
+    for(int i=0;i<3;i++)urls.put(media.group(1)+pool.getString((start+i)%pool.length())+"?akim=1&imdensity=1&imwidth=1280");
+   }
+  }
   JSONObject data=new JSONObject();data.put("pageUrl",PAGE);data.put("release",date.group(1));data.put("images",urls);data.put("logo",logoMatch.group(1).replace("&amp;","&"));
   byte[] bytes=data.toString().getBytes(StandardCharsets.UTF_8);Config next=new Config(data.toString());
   // Download and validate everything before publishing a new set.

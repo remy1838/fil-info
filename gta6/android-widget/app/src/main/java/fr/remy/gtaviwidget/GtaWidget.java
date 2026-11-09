@@ -12,9 +12,9 @@ public final class GtaWidget extends AppWidgetProvider {
  static PendingIntent alarmIntent(Context c){return PendingIntent.getBroadcast(c,1,new Intent(c,GtaWidget.class).setAction(REFRESH),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);}
  @Override public void onReceive(Context c,Intent i){
   super.onReceive(c,i);
-  if(!AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(i.getAction()))updateAll(c);
+  if(!AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(i.getAction())){updateAll(c);GtaSync.enqueue(c);}
  }
- @Override public void onUpdate(Context c,AppWidgetManager m,int[] ids){updateAll(c);}
+ @Override public void onUpdate(Context c,AppWidgetManager m,int[] ids){updateAll(c);GtaSync.enqueue(c);}
  @Override public void onAppWidgetOptionsChanged(Context c,AppWidgetManager m,int id,Bundle opts){updateAll(c);}
  @Override public void onDisabled(Context c){c.getSystemService(AlarmManager.class).cancel(alarmIntent(c));}
  public static void updateAll(Context c){
@@ -25,7 +25,7 @@ public final class GtaWidget extends AppWidgetProvider {
    int h=Math.max(130,opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,225));
    m.updateAppWidget(id,views(c,conf,now,w,h));
   }
-  if(ids.length>0)schedule(c,conf,now);
+  if(ids.length>0){schedule(c,conf,now);GtaSync.schedule(c);}
  }
  public static RemoteViews views(Context c,Config conf,long now,int widthDp,int heightDp){
   int w=Math.min(900,widthDp*2),h=(int)(w*(heightDp/(float)widthDp));
