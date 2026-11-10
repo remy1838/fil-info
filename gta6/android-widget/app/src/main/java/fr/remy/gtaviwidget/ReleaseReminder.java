@@ -15,11 +15,11 @@ public final class ReleaseReminder extends BroadcastReceiver {
   NotificationChannel channel=new NotificationChannel(CHANNEL,"GTA VI · Image et musique",NotificationManager.IMPORTANCE_HIGH);
   channel.setSound(null,null);channel.enableVibration(true);manager.createNotificationChannel(channel);
   PendingIntent open=PendingIntent.getActivity(c,1908,new Intent(Intent.ACTION_VIEW,Uri.parse(Config.PAGE)),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-  Notification.Builder b=new Notification.Builder(c,CHANNEL).setSmallIcon(R.drawable.app_icon).setContentTitle("GTA VI · C’est l’heure !").setContentText(playing?"Flower In A Hurricane · Justice":"Ton compte à rebours est terminé : 19 novembre, 08 h.").setAutoCancel(!playing).setOngoing(playing).setOnlyAlertOnce(true).setContentIntent(open);
+  Notification.Builder b=new Notification.Builder(c,CHANNEL).setSmallIcon(R.drawable.app_icon).setContentTitle("C’est l’heure de jouer, grosse cochonne !").setContentText("Tu vas pouvoir enfin arrêter de te branler devant les vidéos.").setAutoCancel(!playing).setOngoing(playing).setOnlyAlertOnce(true).setContentIntent(open);
   try(java.io.InputStream in=c.getAssets().open("notification_cover.jpg")){
    Bitmap image=BitmapFactory.decodeStream(in);
-   if(image!=null)b.setLargeIcon(image).setStyle(new Notification.BigPictureStyle().bigPicture(image).bigLargeIcon((Bitmap)null).setSummaryText("19 novembre 2026 · 08 h, heure française"));
-  }catch(Exception ignored){b.setStyle(new Notification.BigTextStyle().bigText("19 novembre 2026 à 08 h, heure française."));}
+   if(image!=null)b.setLargeIcon(image).setStyle(new Notification.BigPictureStyle().bigPicture(image).bigLargeIcon((Bitmap)null).setSummaryText("Tu vas pouvoir enfin arrêter de te branler devant les vidéos."));
+  }catch(Exception ignored){b.setStyle(new Notification.BigTextStyle().bigText("C’est l’heure de jouer, grosse cochonne ! Tu vas pouvoir enfin arrêter de te branler devant les vidéos."));}
   if(playing){
    PendingIntent stop=PendingIntent.getService(c,1909,new Intent(c,MusicService.class).setAction(MusicService.STOP),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
    b.addAction(new Notification.Action.Builder((android.graphics.drawable.Icon)null,"Arrêter la musique",stop).build());
