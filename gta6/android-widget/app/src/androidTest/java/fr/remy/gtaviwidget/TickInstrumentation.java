@@ -19,7 +19,7 @@ public class TickInstrumentation extends Instrumentation {
    if(parsed.release!=release)throw new AssertionError("Release must be 19 November 08:00 Paris");
    ReleaseReminder.schedule(getTargetContext());
    if(!ReleaseReminder.post(getTargetContext()))throw new AssertionError("Notification permission missing in test");
-   boolean notificationFound=false;for(android.service.notification.StatusBarNotification n:getTargetContext().getSystemService(android.app.NotificationManager.class).getActiveNotifications())if(n.getId()==ReleaseReminder.NOTIFICATION_ID)notificationFound=true;
+   boolean notificationFound=false;for(int attempt=0;attempt<20&&!notificationFound;attempt++){for(android.service.notification.StatusBarNotification n:getTargetContext().getSystemService(android.app.NotificationManager.class).getActiveNotifications())if(n.getId()==ReleaseReminder.NOTIFICATION_ID)notificationFound=true;if(!notificationFound)SystemClock.sleep(200);}
    if(!notificationFound)throw new AssertionError("Notification not posted");
    getTargetContext().getSystemService(android.app.NotificationManager.class).cancel(ReleaseReminder.NOTIFICATION_ID);
    MainActivity a=(MainActivity)startActivitySync(new Intent(getTargetContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
