@@ -22,7 +22,7 @@ def fetch_names():
     names = [name for name in found if not re.search(r"With_?Logos?", name, re.I)]
     if len(names) < 8:
         raise ValueError("Official gallery did not expose enough landscape artwork")
-    return names[:12]
+    return names[:24]
 
 def update():
     page = PAGE.read_text()
@@ -48,8 +48,8 @@ def update():
     anchor = old.get("anchor_day", today.toordinal())
     if signature != previous_signature:
         anchor = today.toordinal()
-    start = ((today.toordinal() - anchor) * 8) % len(names)
-    selected = [names[(start + offset) % len(names)] for offset in range(8)]
+    start = ((today.toordinal() - anchor) * 24) % len(names)
+    selected = [names[(start + offset) % len(names)] for offset in range(24)]
     replacement = "const artworks=[\n" + ",\n".join("'" + name + "'" for name in selected) + "\n];"
     page, count = re.subn(r"const artworks=\[[\s\S]*?\];", lambda _: replacement, page, count=1)
     if count != 1:
