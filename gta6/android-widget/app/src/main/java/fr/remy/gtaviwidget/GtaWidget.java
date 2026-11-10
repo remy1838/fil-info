@@ -19,7 +19,7 @@ public final class GtaWidget extends AppWidgetProvider {
  @Override public void onDisabled(Context c){c.getSystemService(AlarmManager.class).cancel(alarmIntent(c));}
  public static void updateAll(Context c){
   AppWidgetManager m=AppWidgetManager.getInstance(c);int[] ids=m.getAppWidgetIds(new ComponentName(c,GtaWidget.class));
-  Config conf=Config.load(c);long now=System.currentTimeMillis();
+  Config conf=Config.load(c);long now=System.currentTimeMillis();ReleaseReminder.schedule(c);
   for(int id:ids){Bundle opts=m.getAppWidgetOptions(id);
    int w=Math.max(180,opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,300));
    int h=Math.max(130,opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,225));
@@ -52,7 +52,7 @@ public final class GtaWidget extends AppWidgetProvider {
   if(logo!=null){float lw=w*.20f,lh=lw*logo.getHeight()/logo.getWidth();cv.drawBitmap(logo,null,new RectF(w*.04f,h*.05f,w*.04f+lw,h*.05f+lh),p);}
   p.setColor(Color.WHITE);p.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));p.setShadowLayer(5,0,2,0x66000000);
   p.setTextAlign(Paint.Align.RIGHT);p.setTextSize(h*.025f);
-  cv.drawText("19 NOVEMBRE 2026",w*.95f,h*.075f,p);cv.drawText("00 H · FRANCE",w*.95f,h*.115f,p);
+  cv.drawText("19 NOVEMBRE 2026",w*.95f,h*.075f,p);cv.drawText("08 H · FRANCE",w*.95f,h*.115f,p);
   p.setTextAlign(Paint.Align.CENTER);
   if(now>=conf.release){p.setTextSize(w*.08f);cv.drawText("BIENVENUE À VICE CITY",w/2f,h*.55f,p);}
   else{

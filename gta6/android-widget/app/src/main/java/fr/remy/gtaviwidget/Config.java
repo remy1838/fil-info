@@ -15,7 +15,7 @@ public final class Config {
   JSONObject o=new JSONObject(json);release=OffsetDateTime.parse(o.getString("release")).toInstant().toEpochMilli();
   pageUrl=o.getString("pageUrl");logo=o.getString("logo");
   if(!PAGE.equals(pageUrl))throw new IllegalArgumentException("Lien non pris en charge");
-  JSONArray a=o.getJSONArray("images");if(a.length()!=8)throw new IllegalArgumentException("Huit images requises");
+  JSONArray a=o.getJSONArray("images");if(a.length()!=24)throw new IllegalArgumentException("Vingt-quatre créneaux requis");
   images=new String[a.length()];
   for(int i=0;i<images.length;i++)images[i]=a.getString(i);
  }
@@ -49,19 +49,28 @@ public final class Config {
    if(pool.length()>=8){
     long today=java.time.LocalDate.now(java.time.ZoneId.of("Europe/Paris")).toEpochDay();
     long anchor=Long.parseLong(anchorMatch.group(1));
-    int start=(int)Math.floorMod((today-anchor)*8L,(long)pool.length());
+    int start=(int)Math.floorMod((today-anchor)*24L,(long)pool.length());
     urls=new JSONArray();
-    for(int i=0;i<8;i++)urls.put(media.group(1)+pool.getString((start+i)%pool.length())+"?akim=1&imdensity=1&imwidth=1280");
+    for(int i=0;i<24;i++)urls.put(media.group(1)+pool.getString((start+i)%pool.length())+"?akim=1&imdensity=1&imwidth=1280");
    }
   }
   JSONObject data=new JSONObject();data.put("pageUrl",PAGE);data.put("release",date.group(1));data.put("images",urls);data.put("logo",logoMatch.group(1).replace("&amp;","&"));
   return data.toString();
  }
+ static synchronized byte[] cachedImage(Context c,String url)throws Exception{
+  StringBuilder key=new StringBuilder();
+  for(byte b:java.security.MessageDigest.getInstance("SHA-256").digest(url.getBytes(StandardCharsets.UTF_8)))key.append(String.format(java.util.Locale.ROOT,"%02x",b&255));
+  File folder=new File(c.getFilesDir(),"artwork-cache");folder.mkdirs();File target=new File(folder,key.toString());
+  if(target.exists())return java.nio.file.Files.readAllBytes(target.toPath());
+  byte[] bytes=fetch(url);
+  if(BitmapFactory.decodeByteArray(bytes,0,bytes.length)==null)throw new IOException("Image invalide");
+  java.nio.file.Files.write(target.toPath(),bytes);return bytes;
+ }
  public static void sync(Context c)throws Exception{
   byte[] bytes=configurationFromPage(new String(fetch(PAGE),StandardCharsets.UTF_8)).getBytes(StandardCharsets.UTF_8);Config next=new Config(new String(bytes,StandardCharsets.UTF_8));
   // Download and validate everything before publishing a new set.
   byte[][] all=new byte[next.images.length+1][];
-  for(int i=0;i<next.images.length;i++)all[i]=fetch(next.images[i]);all[next.images.length]=fetch(next.logo);
+  for(int i=0;i<next.images.length;i++)all[i]=cachedImage(c,next.images[i]);all[next.images.length]=cachedImage(c,next.logo);
   for(byte[] b:all)if(BitmapFactory.decodeByteArray(b,0,b.length)==null)throw new IOException("Image invalide");
   for(int i=0;i<all.length;i++)java.nio.file.Files.write(new File(c.getFilesDir(),i==next.images.length?"logo.png":"image"+i+".jpg").toPath(),all[i]);
   java.nio.file.Files.write(new File(c.getFilesDir(),"widget.json").toPath(),bytes);
