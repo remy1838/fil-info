@@ -24,6 +24,12 @@ public class TickInstrumentation extends Instrumentation {
    getTargetContext().getSystemService(android.app.NotificationManager.class).cancel(ReleaseReminder.NOTIFICATION_ID);
    MainActivity a=(MainActivity)startActivitySync(new Intent(getTargetContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
    waitForIdleSync();SystemClock.sleep(700);
+   runOnMainSync(()->a.startForegroundService(new Intent(a,MusicService.class)));
+   for(int wait=0;wait<40&&!MusicService.playing;wait++)SystemClock.sleep(100);
+   if(!MusicService.playing)throw new AssertionError("Automatic music playback did not start");
+   runOnMainSync(()->a.startService(new Intent(a,MusicService.class).setAction(MusicService.STOP)));
+   for(int wait=0;wait<20&&MusicService.playing;wait++)SystemClock.sleep(100);
+   if(MusicService.playing)throw new AssertionError("Stop music action failed");
    String[] texts=new String[2];
    runOnMainSync(()->texts[0]=((Chronometer)a.findViewById(R.id.chrono)).getText().toString());
    SystemClock.sleep(2400);
@@ -31,7 +37,7 @@ public class TickInstrumentation extends Instrumentation {
    if(texts[0].equals(texts[1]))throw new AssertionError("Native countdown frozen");
    for(int i=0;i<24;i++)if(Config.bitmap(getTargetContext(),"image"+i+".jpg")==null)throw new AssertionError("Missing image");
    if(Config.bitmap(getTargetContext(),"logo.png")==null)throw new AssertionError("Missing logo");
-   result.putString("stream","PASS: native RemoteViews countdown changed from "+texts[0]+" to "+texts[1]+"; 08:00 Paris target, notification delivery, 24 hourly slots, gallery and background job verified.\n");
+   result.putString("stream","PASS: native RemoteViews countdown changed from "+texts[0]+" to "+texts[1]+"; 08:00 Paris target, notification image, automatic music playback and stop control, 24 hourly slots, gallery and background job verified.\n");
    finish(Activity.RESULT_OK,result);
   }catch(Throwable e){result.putString("stream","FAIL: "+e.toString()+"\n");finish(Activity.RESULT_CANCELED,result);}
  }

@@ -35,6 +35,13 @@ jobs:
               request=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
               with urllib.request.urlopen(request,timeout=45) as response:
                   (folder/name).write_bytes(response.read())
+          import wave,math,struct
+          # Synthetic test fixture only. The user's private MP3 is inserted locally after CI.
+          with wave.open(str(folder/'notification_music.mp3'),'wb') as audio:
+              audio.setnchannels(1);audio.setsampwidth(2);audio.setframerate(16000)
+              audio.writeframes(b''.join(struct.pack('<h',int(1200*math.sin(2*math.pi*440*i/16000))) for i in range(16000*15)))
+          with urllib.request.urlopen('https://www.rockstargames.com/VI/_next/static/media/Official_Cover_Art_landscape.12.uu2irr.2_a.jpg?akim=1&imdensity=1&imwidth=1536',timeout=45) as response:
+              (folder/'notification_cover.jpg').write_bytes(response.read())
           test_assets=pathlib.Path('gta6/android-widget/app/src/androidTest/assets')
           test_assets.mkdir(parents=True,exist_ok=True)
           with urllib.request.urlopen('https://remy1838.github.io/fil-info/gta6/',timeout=30) as response:
@@ -72,6 +79,12 @@ jobs:
           cp gta6/android-widget/app/build/outputs/apk/release/app-release.apk gta6/android-widget/delivery/GTA_VI_Widget.apk
           cp gta6/android-widget/widget-preview.png gta6/android-widget/delivery/
           cp /tmp/gta-test.txt gta6/android-widget/delivery/verification.txt
+          python3 - <<'PY'
+          import pathlib,os,shutil
+          sdk=pathlib.Path(os.environ.get('ANDROID_HOME',os.environ.get('ANDROID_SDK_ROOT','/usr/local/lib/android/sdk')))
+          jar=sorted(sdk.glob('build-tools/*/lib/apksigner.jar'))[-1]
+          shutil.copy(jar,'gta6/android-widget/delivery/apksigner.jar')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: GTA_VI_Widget_Samsung

@@ -37,6 +37,11 @@ public class MainActivity extends Activity {
    if(m.isRequestPinAppWidgetSupported())m.requestPinAppWidget(new ComponentName(this,GtaWidget.class),null,null);
    else Toast.makeText(this,"Appui long sur l'accueil → Widgets → GTA VI Widget",Toast.LENGTH_LONG).show();
   });
+  button("Tester la notification et la musique",()->{
+   if(!ReleaseReminder.allowed(this)){Toast.makeText(this,"Autorise d'abord les notifications.",Toast.LENGTH_LONG).show();return;}
+   startForegroundService(new Intent(this,MusicService.class));
+  });
+  root.addView(text("Le morceau démarrera automatiquement à 08 h. Vérifie que ton volume multimédia est audible. Tu pourras arrêter la musique depuis la notification.",12));
   button("Synchroniser depuis mon lien",()->{
    state.setText("Synchronisation des images horaires…");
    new Thread(()->{try{Config.sync(this);runOnUiThread(()->{state.setText("Visuels et date synchronisés.");refresh();});}
